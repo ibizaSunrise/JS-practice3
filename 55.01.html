@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>magnifying glass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 600px;
+            margin: 3rem auto;
+            position: relative;
+
+        }
+
+        .glass {
+            position: absolute;
+            border: 6px solid black;
+            border-radius: 50%;
+            cursor: none;
+            width: 190px;
+            height: 190px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img id='img1'
+            src="https://images.unsplash.com/photo-1550853024-fae8cd4be47f?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1"
+            alt="tukan" width="807" height="797">
+    </div>
+
+    <script>
+        magnify('img1', 4);
+        function magnify(imgID, zoom) {
+            let img, glass, w, h, bw;
+            img = document.getElementById(imgID);
+            //Создаю линзу и вставляю в картинку
+            glass = document.createElement('div');
+            glass.className = 'glass';
+            img.before(glass);
+            //Определяю фон для лупы
+            glass.style.backgroundImage = "url('" + img.src + "')";
+            glass.style.backgroundRepeat = 'no-repeat';
+            glass.style.backgroundSize = (img.width * zoom) + 'px' + (img.height * zoom) + 'px';
+
+            bw = 3;
+            w = glass.offsetWidth / 2;
+            h = glass.offsetHeight / 2;
+            /*Слушатели событий если происходит перемещение лупы по изображению*/
+            glass.addEventListener('mousemove', moveMaghifier);
+            img.addEventListener('mousemove', moveMaghifier);
+            glass.addEventListener('touchmove', moveMaghifier);
+            img.addEventListener('touchmove', moveMaghifier);
+
+            function moveMaghifier(e) {
+                //Определяю координаты курсора
+                let pos, x, y;
+                e.preventDefault();
+                pos = getCursorPosition(e);
+                x = pos.x;
+                y = pos.y;
+                /*Ограничиваю расположение линзы внутри изображения*/
+                if (x > img.width - (w / zoom)) x = img.width - (w / zoom);
+                if (x < w / zoom) x = w / zoom;
+                if (y > img.height - (h / zoom)) y = img.height - (h / zoom);
+                if (y < h / zoom) y = h / zoom;
+                //устанавливаю положение лупы
+                glass.style.left = (x - w) + 'px';
+                glass.style.top = (y - h) + 'px';
+                //Дисплей показывает то что видит лупа
+                glass.style.backgroundPosition = '-' + ((x * zoom) - w + bw) + 'px -' + ((y * zoom) - h + bw) + 'px';
+
+            }
+
+            function getCursorPosition(e) {
+                let a, x = 0, y = 0;
+                e = e || window.event;
+                //Определяю координаты X Y изображения
+                a = img.getBoundingClientRect();
+                /*Рассчитываюкоординаты x y курсора относительно изображения*/
+                x = e.pageX - a.left;
+                y = e.pageY - a.top;
+
+                //Любая прокрутка на страницу
+                x = x - window.pageXOffset;
+                y = y - window.pageYOffset;
+                return { x: x, y: y };
+            }
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
