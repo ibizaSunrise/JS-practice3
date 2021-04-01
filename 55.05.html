@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.05</title>
+</head>
+<style>
+    #table {
+        width: 500px;
+        border-collapse: collapse;
+
+    }
+
+    #table td,
+    th {
+        border: 1px solid black;
+        text-align: center;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+    }
+
+    input,
+    button {
+        margin-top: 1rem;
+        width: 50%;
+    }
+</style>
+
+<body>
+
+    <table id="table">
+
+    </table>
+    <div>
+        <p>Изменить местоположение колонок по индексам:</p>
+        Введи номер первой колонки (0, 1, 2...):
+        <input type="number" id='a'>
+        Введи номер второй колонки (0, 1, 2...): <input type="number" id='b'>
+        <button>Change</button>
+        <p id='message'></p>
+    </div>
+
+    <script>
+        let table = document.querySelector('#table');
+        let tableContent = [[1, 2, 3], [4, 5, 6,], [7, 8, 9]];
+        let l = tableContent[0].length;
+
+        document.querySelector('button').addEventListener('click', function () {
+            let index1 = document.querySelector('#a').value;
+            let index2 = document.querySelector('#b').value;
+
+            if ((index1 && index2) && index1 < l && index2 < l && index1 >= 0 && index1 >= 0) {
+                removeTable();
+                createTable(getColumnArray(getColumnArray(correct2DArr(getColumnArray(tableContent), [index1, index2]))));
+            } else {
+                document.querySelector('#message').innerHTML = 'Введите корректные данные';
+            }
+
+        })
+
+        createTable(tableContent);
+
+        function createTable(arr) {
+
+            for (let subArr of arr) {
+                let k = 0;
+                let tr = document.createElement('tr');
+
+                for (let elem of subArr) {
+                    let td = document.createElement('td');
+                    td.innerHTML = elem;
+                    td.setAttribute('data-num', k)
+                    tr.append(td);
+                    ++k;
+                }
+                table.append(tr);
+            }
+        }
+
+        function removeTable() {
+            table.innerHTML = "";
+        }
+
+        function getColumnArray(arr) {
+            let result = []
+            for (let i = 0; i < arr.length; i++) {
+
+                for (let j = 0; j < arr[i].length; j++) {
+                    if (result[j] === undefined) result[j] = [];
+                    result[j][i] = arr[i][j];
+                }
+            }
+            return result;
+        }
+
+        // console.log(getColumnArray(tableContent))
+        // Использую getColumnArray в ней же и получается обратная смена на 2D массив по рядам
+        // console.log(getColumnArray(getColumnArray(tableContent)))
+
+        function correct2DArr(arr, param) {
+            let result = []
+            let tmp;
+            for (let i = 0; i < arr.length; i++) {
+
+                arr[i][param[1]] = arr[i].splice(param[0], 1, arr[i][param[1]])[0];
+                result = arr;
+            }
+            return result;
+        }
+
+        // console.log(correct2DArr(getColumnArray(tableContent), [1, 2]))
+
+    </script>
+</body>
+
+</html>
