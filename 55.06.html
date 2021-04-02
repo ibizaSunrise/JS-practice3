@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.06 Input & Calendar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --inpW: 20rem;
+            --inpH: 3rem;
+            --gray: rgb(51, 49, 49);
+        }
+
+        html {
+            font-size: 62.5%;
+
+        }
+
+        body {
+            font-family: -apple-system,
+                BlinkMacSystemFont,
+                Roboto,
+                Helvetica Neue,
+                sans-serif;
+            font-size: 1.6rem;
+
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            margin: 20vw;
+        }
+
+    
+        #dt {
+            width: var(--inpW);
+            outline: none;
+            height: var(--inpH);
+            border: 1px solid var(--gray);
+        }
+
+        .calendar {
+            display: none;
+        }
+
+        .calendar__nav {
+            width: var(--inpW);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-left: 2px;
+            padding-right: 2px;
+            border: 1px solid var(--gray);
+            height: var(--inpH);
+            padding-top: calc(var(--inpH)/5);
+
+        }
+
+        .table {
+            width: var(--inpW);
+            border-collapse: collapse;
+        }
+
+        .table td,
+        .table th {
+            border: 1px solid var(--gray);
+            text-align: center;
+            height: var(--inpH);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="input__wrapper">
+            <input type="text" id="dt">
+        </div>
+        <div class="calendar">
+            <div class='calendar__nav'>
+                <div class="calendar__arrows prev">&lt;</div>
+                <div class="calendar__info">01.04.2021</div>
+                <div class="calendar__arrows next">&gt;</div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>пн</th>
+                        <th>вт</th>
+                        <th>ср</th>
+                        <th>чт</th>
+                        <th>пт</th>
+                        <th>сб</th>
+                        <th>вс</th>
+                    </tr>
+                </thead>
+                <tbody class="body"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+
+        let inp = document.querySelector('#dt');
+        let calendar = document.querySelector('.calendar');
+        let body = calendar.querySelector('.body');
+        let info = document.querySelector('.calendar__info');
+        let months = [
+            'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+            'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+        ];
+        let date = new Date();
+
+        let prev = calendar.querySelector('.prev');
+        let next = calendar.querySelector('.next');
+
+        function draw() {
+            let year = date.getFullYear();
+            let month = date.getMonth();
+            let arr = range(getLastDay(year, month));
+
+            let firstWeekDay = getFirstWeekDay(year, month);
+            let lastWeekDay = getLastWeekDay(year, month);
+
+            let matrix = chunk(normalize(arr, firstWeekDay, 6 - lastWeekDay), 7);
+            createTable(body, matrix);
+            info.innerHTML = months[month] + ' ' + year;
+        }
+
+
+        function createTable(parent, arr) {
+            parent.innerHTML = '';
+            let cells = [];
+            for (let subArr of arr) {
+                let tr = document.createElement('tr');
+                for (let item of subArr) {
+                    let td = document.createElement('td');
+                    td.innerHTML = item;
+                    tr.append(td);
+                    cells.push(td);
+                }
+
+                parent.append(tr);
+            }
+            return cells;
+        }
+
+        function getLastDay(year, month) {
+            let date = new Date(year, month + 1, 0);
+            return date.getDate();
+        }
+
+
+        function getFirstWeekDay(year, month) {
+            let date = new Date(year, month, 1);
+            let num = date.getDay();
+
+            if (num == 0) {
+                return 6;
+            } else {
+                return num - 1;
+            }
+        }
+
+        function getLastWeekDay(year, month) {
+            let date = new Date(year, month + 1, 0);
+            let num = date.getDay();
+
+            if (num == 0) {
+                return 6;
+            } else {
+                return num - 1;
+            }
+        }
+
+        function range(count) {
+            let arr = [];
+            for (let i = 1; i <= count; i++) {
+                arr.push(i);
+            }
+
+            return arr;
+        }
+
+        function normalize(arr, left, right) {
+            return [...getEmptyArr(left), ...arr, ...getEmptyArr(right)];
+        }
+
+        function getEmptyArr(n) {
+            let arr = [];
+            for (let i = 0; i < n; i++) {
+                arr.push("");
+            }
+
+            return arr;
+        }
+
+
+        function chunk(arr, n) {
+            return arr.map((_, index) => arr.slice(index * n, index * n + n)).filter(el => el.length);
+        }
+
+        prev.addEventListener("click", () => {
+            date.setMonth(date.getMonth() - 1);
+            draw();
+
+        });
+
+        next.addEventListener("click", () => {
+            date.setMonth(date.getMonth() + 1);
+            draw();
+        });
+
+        body.addEventListener('click', (e) => {
+            let day = e.target.innerHTML;
+            let arr = info.innerHTML.split(' ');
+            let month = months.indexOf(arr[0]) + 1;
+            let year = arr[1];
+            if (e.target.innerHTML != "") {
+                inp.value = addZero(day) + '-' + addZero(month) + '-' + year;
+            }
+        })
+
+        function addZero(num) {
+            if (num >= 0 && num <= 9) {
+                return '0' + num;
+            } else {
+                return num;
+            }
+        }
+        inp.addEventListener('focus', () => {
+            calendar.style.display = 'block';
+        })
+
+        inp.addEventListener('dblclick', (e) => {
+            e.stopPropagation()
+            calendar.style.display = 'none';
+        })
+        draw();
+    </script>
+</body>
+
+</html>
