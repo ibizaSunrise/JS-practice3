@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.07 Notebook</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="notebook">
+            <div class="notebook__left-field">
+                
+              
+            </div>
+            <div class="notebook__right-field">
+                <textarea class = "notebook__textarea" autofocus></textarea>
+                <button class = "notebook__add-note">Add</button>
+                <p class ="notebook__message"></p>
+            </div>
+
+        </div>
+    </div>
+    <script>
+         let addBtn = document.querySelector('.notebook__add-note');
+
+    
+         function getNotes(noteName) {
+            let notes = localStorage.getItem(noteName);
+            if (notes == null) {
+                notesArr = [];
+            } else {
+                notesArr = JSON.parse(notes);
+            }
+        }
+
+        addBtn.addEventListener('click', () => {
+            getNotes('n1');
+            let date = new Date;
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate()
+            let hours = date.getHours();
+            let min = date.getMinutes();
+            let text = document.querySelector('.notebook__textarea');
+            let title = document.querySelector('.block__date');
+
+            let myObj = {
+                title: `${addZero(day)}:${addZero(month)}:${year}  ${addZero(hours)}:${addZero(min)}`,
+                text: text.value
+            }
+            notesArr.push(myObj);
+            localStorage.setItem('n1', JSON.stringify(notesArr));
+            text.value = '';
+            showNotes();
+        })
+
+        function addZero(num){
+            if(num >=0 && num <=9){
+                return '0'+num;
+            }else{
+                return num;
+            }
+        }
+
+    
+        function showNotes() {
+            getNotes('n1');
+            let blocks = document.querySelector('.notebook__left-field');
+            blocks.innerHTML = '';
+            notesArr.forEach(function (element, index) {
+                blocks.insertAdjacentHTML('afterbegin',`
+                <div class="notebook__block block">
+                    <div class="block__date" id = "${index}"  onclick = "showText(event, this.id)">${element.title}</div>
+                </div>
+                `);
+
+            });
+        }
+
+        function showText(e, index) {
+            getNotes('n1');
+            let text = document.querySelector('.notebook__textarea');
+            text.value = notesArr[e.target.id].text;
+
+            text.addEventListener('dblclick', () => text.value = '');
+            
+        }
+        showNotes();
+      
+    </script>
+</body>
+</html>
