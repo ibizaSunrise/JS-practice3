@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.08</title>
+    <style>
+        .div1{
+            width: 100px;
+            height: 100px;
+            margin-top: 10px;
+            border: 1px solid red;
+            /* overflow: auto;
+            resize: both; */
+        }
+        .div2{
+            width: 200px;
+            height: 200px;
+            margin-top: 10px;
+            border: 1px solid blue;
+        }
+
+        .div3{
+            width: 400px;
+            height: 200px;
+            margin-top: 10px;
+            border: 1px solid green;
+        }
+    </style>
+</head>
+<body>
+    <div class="div1" data-resizable></div>
+    <div class="div2"></div>
+    <div class="div3" data-resizable></div>
+    <script>
+        window.addEventListener('load', resize);
+
+        function resize(){
+            let resizableElements = document.querySelectorAll('[data-resizable]');
+            for(let resizableElement of resizableElements){
+                resizableElement.style.overflow = 'auto';
+                resizableElement.style.resize = 'both';
+            }
+        }
+
+        
+    </script>
+</body>
+</html>
