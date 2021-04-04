@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagin Drag 55.09</title>
+    <style>
+        .div1 {
+            width: 100px;
+            height: 100px;
+            margin-top: 10px;
+            border: 1px solid red;
+            /* overflow: auto;
+            resize: both; */
+        }
+
+        .div2 {
+            width: 200px;
+            height: 200px;
+            margin-top: 10px;
+            border: 1px solid blue;
+        }
+
+        .div3 {
+            width: 400px;
+            height: 200px;
+            margin-top: 10px;
+            border: 1px solid green;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div1" data-drag></div>
+    <div class="div2"></div>
+    <div class="div3" data-drag></div>
+    <script>
+        window.addEventListener('load', drag);
+
+        function drag() {
+            let dragElements = document.querySelectorAll('[data-drag]');
+            let offsetX, offsetY;
+            for (let elem of dragElements) {
+                elem.draggable = true;
+
+                elem.addEventListener('dragstart', function (event) {
+                    
+                    offsetX = event.offsetX;
+                    offsetY = event.offsetY;
+                })
+
+                elem.addEventListener('dragend', function (event) {
+                    elem.style.position = 'absolute';
+                    elem.style.top = (event.pageY - offsetY) + 'px';
+                    elem.style.left = (event.pageX - offsetX) + 'px';
+                })
+            }
+        }
+
+    </script>
+</body>
+
+</html>
