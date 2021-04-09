@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.10 Elastic search</title>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <input type="text" id="search" oninput='search(this)'>
+
+    <h1>lorem</h1>
+    <h2>lortm</h2>
+    <h3>lorem</h3>
+    <p>Lorem dolor sit amet consectetur adipisicing elit. Suscipit excepturi delectus, quia
+        nesciunt ipsam, <b>fuga beatae</b>
+        neque obcaecati accusantium deserunt, placeat tempora consequatur illum unde? A autem dolore distinctio debitis?
+        Dicta aspernatur aliquam praesentium, aperiam amet necessitatibus nisi exercitationem. Ducimus ipsum quas quis
+        non natus sint tenetur, sequi exercitationem recusandae.</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro accusamus earum nobis natus deserunt rerum
+    <p>Lorem, ipsum dolor esse ex voluptas odio, provident laboriosam. Voluptas, obcaecati sequi
+        corporis iure amet
+        nostrum qui! Tenetur deserunt ea labore praesentium consequatur, veritatis rem. Accusamus, eius molestiae.</p>
+    <table>
+        <tr>
+            <td>1lorem</td>
+            <td>2lo <span>lorem</span></td>
+        </tr>
+    </table>
+    <div>Hello<span> world</span>lorem</div>
+    <ul>Todo
+        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni facilis odio quia </li>
+        <li>repudiandae consequuntur ad libero recusandae sint vitae. Quia quas eveniet minima debitis fugiat non
+            delectus itaque, voluptas aliquid. </li>
+    </ul>
+    <script>
+
+        let allTags = document.querySelectorAll('p, span, td, li, ul, ol, div, h1, h2, h3, b');//+ всякие специфические если надо sup sub em blockquote i q h4-6 и тд
+
+        function search(elem) {
+            let text = elem.value.trim();
+            let regex = new RegExp(text, 'g');
+
+            for (let i = 0; i < allTags.length; i++) {
+                let res = allTags[i].textContent.replace(regex, `<mark>${text}</mark>`);
+                allTags[i].innerHTML = res;
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
