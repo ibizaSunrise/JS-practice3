@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.13 Todo(LocalStorage)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="todo__head">
+            <h1><span>TODO</span>List</h1>
+            <input type="text" id="input" autocomplete="off">
+            <button id="added">&#10010;</button>
+        </div>
+        <div class="todo__body"></div>
+    </div>
+    <script>
+        const addBtn = document.querySelector('#added');
+        const todoBody = document.querySelector('.todo__body');
+
+        function getTodo() {
+            let todo = localStorage.getItem('todo');
+            if (todo == null) {
+                todoArr = [];
+            } else {
+                todoArr = JSON.parse(todo);
+            }
+        }
+
+        addBtn.addEventListener('click', () => {
+            getTodo();
+
+            let input = document.querySelector('#input');
+            let myObj = {
+                value: input.value,
+                active: false
+            }
+            let value = input.value;
+            todoArr.push(myObj);
+            localStorage.setItem('todo', JSON.stringify(todoArr));
+            input.value = '';
+
+            showTodo();
+
+
+        });
+
+
+        function showTodo() {
+            getTodo();
+            todoBody.innerHTML = '';
+            todoArr.forEach((el, index) => {
+                if (el.active == true) {
+                    todoBody.insertAdjacentHTML('afterbegin', `
+    <div class="item">
+       <input type="text" class = "item__input" value = "${el.value}" disabled style = "text-decoration: line-through; opacity: 0.3;">
+       <button class="upButton" id = '${index}' onclick = 'upTodo(this.id)' style = "color: lawngreen;">&#10004;</button>
+       <button id = '${index}' onclick = 'deleteTodo(this.id)' class="removeButton">&#10008;</button>
+   </div>
+    `);
+                } else {
+                    todoBody.insertAdjacentHTML('afterbegin', `
+    <div class="item">
+       <input type="text" class = "item__input" value = "${el.value}"  disabled>
+       <button class="upButton" id = '${index}' onclick = 'upTodo(this.id)'>&#10004;</button>
+       <button id = '${index}' onclick = 'deleteTodo(this.id)' class="removeButton">&#10008;</button>
+   </div>
+    `);
+                }
+
+            })
+        }
+
+        function deleteTodo(index) {
+            getTodo();
+            todoArr.splice(index, 1);
+            localStorage.setItem('todo', JSON.stringify(todoArr));
+            showTodo();
+        }
+
+        function upTodo(index) {
+            getTodo();
+            todoArr.findIndex((el, index) => {
+                el.active = true;
+            })
+            localStorage.setItem('todo', JSON.stringify(todoArr));
+            showTodo();
+        }
+        showTodo();
+    </script>
+</body>
+
+</html>
