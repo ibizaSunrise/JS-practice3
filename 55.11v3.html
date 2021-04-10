@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Menu 55.11 v3 </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        .body {
+            background-color: lightyellow;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a{
+            text-decoration: none;
+            color: inherit;
+        }
+
+        nav {
+            background-color: lightgrey;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            padding-right: 30px;
+            padding-left: 30px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            width: 15%;
+        }
+
+        .menu-ctn>li {
+            display: inline-block;
+            background-color: lightyellow;
+            padding: 10px 15px;
+            transition: all 0.8s ease;
+            position: relative;
+        }
+
+        .menu-ctn li:hover {
+            cursor: pointer;
+            background-color: lightcyan;
+        }
+
+        .submenu {
+            position: absolute;
+            left: 0;
+            top: 100%;
+            width: 100%;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            background-color: lightyellow;
+            z-index: 1;
+            text-align: center;
+           
+        }
+        
+        .submenu  li{
+            padding: 10px 15px;
+        }
+ 
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            LOGO
+        </div>
+
+        <ul class="menu-ctn">
+            <li><a href="#">HOME</a></li>
+            
+            <li data-toggle-id="dropdown">
+                <a data-toggle-id="dropdown" href="#" >MY SHOP</a> 
+                <ul class = "submenu" id="dropdown" hidden>
+                    <li><a href="/">Item 1</a></li>
+                    <li><a href="#">Item 2</a></li>
+                    <li><a href="#">Item 3</a></li>
+                </ul>
+            </li>
+            <li data-toggle-id="dropdown1">
+                <a data-toggle-id="dropdown1" href="#" >ABOUT</a> 
+                <ul class = "submenu" id="dropdown1" hidden>
+                    <li><a href="/">Item 1</a></li>
+                    <li><a href="#">Item 2</a></li>
+                    <li><a href="#">Item 3</a></li>
+                </ul>
+            </li>
+       
+            <li>CONTACT</li>
+        </ul>
+    </nav>
+    <script>
+/*
+Делегирование событий
+Приём проектирования «поведение». Поведение: «Переключатель» (Toggler)
+*/
+        document.addEventListener('click', function(event){
+            let id = event.target.dataset.toggleId;
+            if (!id) return;
+            let elem = document.getElementById(id);
+            elem.hidden = !elem.hidden;
+        })
+    </script>
+</body>
+
+</html>
