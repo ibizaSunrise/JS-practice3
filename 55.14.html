@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.14 && 55.15 используя плагин imask.js (cdn) </title>
+    <style>
+        .wrapper {
+            display: flex;
+            padding: 64px 0;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wrapper__input {
+            max-width: 440px;
+            width: 100%;
+        }
+
+        .wrapper__input:not(:last-child) {
+            margin-bottom: 16px;
+        }
+
+        .wrapper__input input {
+            width: 100%;
+            height: 48px;
+            border: 2px solid #3626a7;
+            background: rgba(54, 38, 167, 0.32);
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .wrapper__input input:focus {
+            outline: none;
+            background: rgba(54, 38, 167, 0.64);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="wrapper__input">
+            <input type="text" data-mask="phone" /> <!-- поле ввода для номера телефона -->
+        </div>
+        <div class="wrapper__input">
+            <input type="text" data-mask="postalCode" /> <!-- поле ввода для почтового индекса -->
+        </div>
+        <div class="wrapper__input">
+            <input type="text" data-mask="date" /> <!-- поле ввода для даты -->
+        </div>
+        <div class="wrapper__input">
+            <input type="text" data-mask="number" /> <!-- поле ввода для числа -->
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const mask = (dataValue, options) => {
+                const elements = document.querySelectorAll(`[data-mask="${dataValue}"]`) 
+                if (!elements) return 
+
+                elements.forEach(el => { 
+                    IMask(el, options) // инициализирую плагин imask для необходимых полей ввода с переданными параметрами маски
+                })
+            }
+
+            // Использую функцию mask для разных типов масок
+
+            // Маска для номера телефона
+            mask('phone', {
+                mask: '+{7}(000)000-00-00'
+            })
+
+            // Маска для почтового индекса
+            mask('postalCode', {
+                mask: '000000' // шесть цифр
+            })
+
+            // Маска для даты
+            mask('date', {
+                mask: Date,
+                min: new Date(1900, 0, 1), // минимальная дата 01.01.1900
+            })
+
+            // Маска для числа
+            mask('number', {
+                mask: Number,
+                thousandsSeparator: ' ' // разделитель тысяч в числе
+            })
+
+        })
+    </script>
+    <script src="https://unpkg.com/imask"></script>
+</body>
+
+</html>
