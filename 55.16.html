@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.06 Input & Calendar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --inpW: 20rem;
+            --inpH: 3rem;
+            --gray: rgb(51, 49, 49);
+        }
+
+        html {
+            font-size: 62.5%;
+
+        }
+
+        body {
+            font-family: -apple-system,
+                BlinkMacSystemFont,
+                Roboto,
+                Helvetica Neue,
+                sans-serif;
+            font-size: 1.6rem;
+
+        }
+
+        .wrapper {
+            display: flex;
+            margin: 10vw;
+        }
+
+        .right__field {
+            width: var(--inpW);
+            border: 1px solid var(--gray);
+
+        }
+
+        #start,
+        #end {
+            width: var(--inpW);
+            outline: none;
+            height: var(--inpH);
+            border: 1px solid var(--gray);
+        }
+
+        .calendar__nav {
+            width: var(--inpW);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-left: 2px;
+            padding-right: 2px;
+            border: 1px solid var(--gray);
+            height: var(--inpH);
+            padding-top: calc(var(--inpH)/5);
+
+        }
+
+        .table {
+            width: var(--inpW);
+            border-collapse: collapse;
+        }
+
+        .table td,
+        .table th {
+            border: 1px solid var(--gray);
+            text-align: center;
+            height: var(--inpH);
+            cursor: pointer;
+        }
+
+        .calendar__arrows {
+            cursor: pointer;
+        }
+
+        button {
+            margin: 1rem 0 1rem 2rem;
+          
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="left__field">
+
+            <p class="message"></p>
+            <div class="calendar">
+                <div class='calendar__nav'>
+                    <div class="calendar__arrows prev">&lt;</div>
+                    <div class="calendar__info">01.04.2021</div>
+                    <div class="calendar__arrows next">&gt;</div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>пн</th>
+                            <th>вт</th>
+                            <th>ср</th>
+                            <th>чт</th>
+                            <th>пт</th>
+                            <th>сб</th>
+                            <th>вс</th>
+                        </tr>
+                    </thead>
+                    <tbody class="body"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="right__field">
+
+            <label for="start">Выбери первую дату:</label>
+            <input type="text" id="start">
+            <label for="end">Выбери вторую дату:</label>
+            <input type="text" id="end">
+            <button id="calc">Считай</button>
+            <button id="reset">Сбрось</button>
+            <p id="res"></p>
+
+
+        </div>
+    </div>
+
+    <script>
+
+        let calendar = document.querySelector('.calendar');
+        let body = calendar.querySelector('.body');
+        let info = document.querySelector('.calendar__info');
+        let months = [
+            'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+            'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+        ];
+        let date = new Date();
+
+        let prev = calendar.querySelector('.prev');
+        let next = calendar.querySelector('.next');
+        let arrDate = [];
+
+        draw();
+
+        function draw() {
+            let year = date.getFullYear();
+            let month = date.getMonth();
+            let arr = range(getLastDay(year, month));
+
+            let firstWeekDay = getFirstWeekDay(year, month);
+            let lastWeekDay = getLastWeekDay(year, month);
+
+            let matrix = chunk(normalize(arr, firstWeekDay, 6 - lastWeekDay), 7);
+            createTable(body, matrix);
+            info.innerHTML = months[month] + ' ' + year;
+        }
+
+       
+        function createTable(parent, arr) {
+            parent.innerHTML = '';
+            let cells = [];
+            for (let subArr of arr) {
+                let tr = document.createElement('tr');
+                for (let item of subArr) {
+                    let td = document.createElement('td');
+                    td.innerHTML = item;
+                    tr.append(td);
+                    cells.push(td);
+                }
+
+                parent.append(tr);
+            }
+            return cells;
+        }
+
+        function getLastDay(year, month) {
+            let date = new Date(year, month + 1, 0);
+            return date.getDate();
+        }
+
+
+        function getFirstWeekDay(year, month) {
+            let date = new Date(year, month, 1);
+            let num = date.getDay();
+
+            if (num == 0) {
+                return 6;
+            } else {
+                return num - 1;
+            }
+        }
+
+        function getLastWeekDay(year, month) {
+            let date = new Date(year, month + 1, 0);
+            let num = date.getDay();
+
+            if (num == 0) {
+                return 6;
+            } else {
+                return num - 1;
+            }
+        }
+
+        function range(count) {
+            let arr = [];
+            for (let i = 1; i <= count; i++) {
+                arr.push(i);
+            }
+
+            return arr;
+        }
+
+        function normalize(arr, left, right) {
+            return [...getEmptyArr(left), ...arr, ...getEmptyArr(right)];
+        }
+
+        function getEmptyArr(n) {
+            let arr = [];
+            for (let i = 0; i < n; i++) {
+                arr.push("");
+            }
+
+            return arr;
+        }
+
+
+        function chunk(arr, n) {
+            return arr.map((_, index) => arr.slice(index * n, index * n + n)).filter(el => el.length);
+        }
+
+        prev.addEventListener("click", () => {
+            date.setMonth(date.getMonth() - 1);
+            draw();
+
+        });
+
+        next.addEventListener("click", () => {
+            date.setMonth(date.getMonth() + 1);
+            draw();
+        });
+
+
+
+        body.addEventListener('click', function f(e) {
+            let start = document.querySelector("#start");
+            let end = document.querySelector("#end");
+            let day = e.target.innerHTML;
+            let arr = info.innerHTML.split(' ');
+            let month = months.indexOf(arr[0]) + 1;
+            let year = arr[1];
+
+            if (e.target.innerHTML != "") {
+                arrDate.push(year + ',' + month + ',' + day);
+                e.target.style.backgroundColor = "yellow"
+            }
+
+            start.value = formatDate(arrDate[0]) || "";
+            end.value = formatDate(arrDate[1]) || "";
+
+            if (arrDate.length > 1) {
+                body.removeEventListener("click", f)
+            }
+
+        })
+
+
+        document.querySelector("#reset").addEventListener('click', () => window.location.reload())
+
+        
+        document.querySelector('#calc').addEventListener("click", function (e) {
+            let message = document.querySelector("#res");
+            message.innerHTML = "Количество дней: " + (new Date(arrDate[1]) - new Date(arrDate[0])) / 1000 / 86400;
+        })
+
+
+        function addZero(num) {
+            if (num >= 0 && num <= 9) {
+                return '0' + num;
+            } else {
+                return num;
+            }
+        }
+
+        function formatDate(str) {
+            return str.split(',')
+            .reverse()
+            .map(el => addZero(el))
+            .join("-");
+        }
+    </script>
+</body>
+
+</html>
