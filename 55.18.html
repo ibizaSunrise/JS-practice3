@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.18 подсветка кода с помощью библиотеки highlight.js(cdn)</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/monokai.min.css">
+    <!-- тут меняем стиль  подсветки кода (сейчас monokai) -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+
+</head>
+
+<body>
+    <!-- http://shpargalkablog.ru/2010/12/napisat-kod-tekstom.html 
+тут онлайн перевожу теги в текст -->
+
+
+    <pre><code class="html">
+            &lt;head&gt;
+            &lt;meta charset="UTF-8"&gt;
+            &lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+            &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+            &lt;title&gt;Document&lt;/title&gt;
+            &lt;link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/monokai.min.css"&gt;
+            &lt;script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"&gt;&lt;/script&gt;
+            &lt;style&gt;
+                .code {
+                    width: 50vw;
+                    margin: 0 auto 2rem auto;
+                }
+            &lt;/style&gt;
+    </code></pre>
+
+    <pre><code class="js">
+            function $initHighlight(block, cls) {
+                try {
+                  if (cls.search(/\bno\-highlight\b/) != -1)
+                    return process(block, true, 0x0F) +
+                           ` class="${cls}"`;
+                } catch (e) {
+                  /* handle exception */
+                }
+                for (var i = 0 / 2; i < classes.length; i++) {
+                  if (checkCondition(classes[i]) === undefined)
+                    console.log('undefined');
+                }
+              
+                return (
+                    &lt;div&gt;
+                    &lt;web-component&gt;{block}&lt;/web-component&gt;
+                    &lt;/div&gt;
+                )
+            }
+              
+              export  $initHighlight;
+    </code></pre>
+
+    <pre><code class="json">
+                [
+                {
+                    "title": "apples",
+                    "count": [12000, 20000],
+                    "description": {"text": "...", "sensitive": false}
+                },
+                {
+                    "title": "oranges",
+                    "count": [17500, null],
+                    "description": {"text": "...", "sensitive": false}
+                }
+                ]
+    </code></pre>
+
+    <script>
+        document.querySelectorAll('pre code').forEach(block => {
+            
+            hljs.highlightBlock(block);
+        });
+
+    </script>
+</body>
+
+</html>
