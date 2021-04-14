@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.19 всплывающее окно с rgb по наведению</title>
+    <style>
+        .red{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+        .blue{
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+        }
+        div{
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="red" data-color></div>
+    <div class="blue" data-color></div>
+
+    
+    <script>
+        let colors = document.querySelectorAll("[data-color]");
+        colors.forEach(function(color){
+            color.addEventListener('mouseover', function(){
+                this.setAttribute('title', getComputedStyle(this).backgroundColor)
+            })
+        })
+ 
+    </script>
+</body>
+</html>
