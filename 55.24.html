@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.24 email-лы в ссылки mailto</title>
+</head>
+
+<body>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit test1@mail.ru Quod, eveniet facere, ratione perferendis
+        beatae commodi cum perspiciatis eius quis consequuntur ipsum test2@gmail.com labore fuga aspernatur voluptas
+        unde. Ex dicta ipsum voluptatem.</p>
+
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. test3@wp.pl Eius quae, tempora temporibus expedita
+        perspiciatis porro rem aperiam incidunt odit laboriosam!</p>
+
+    <script>
+        let allTags = document.querySelectorAll('p, span, td, li, ul, ol, div, h1, h2, h3, b')
+
+        document.addEventListener('DOMContentLoaded', () => {
+            for (let i = 0; i < allTags.length; i++) {
+
+                /*весь email попадает в именнованную скобочную группу(?<mail>). Использую скобочную группу при замене($<mail>)
+                */
+                let regExp = /(?<mail>[-.\w]+@([\w-]+\.)+[\w-]+)/g;
+
+                allTags[i].innerHTML = allTags[i].textContent.replace(regExp, `<a href="mailto:$<mail>">$<mail></a>`);
+
+            }
+        })
+
+    </script>
+</body>
+
+</html>
