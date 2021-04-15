@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>55.21</title>
+    <style>
+        .clock {
+            width: fit-content;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="elem" class="clock" data-time>
+        <span data-time>21:01:09</span>
+    </div>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint beatae fuga dolorum saepe temporibus! <span
+        data-time>21:01:09</span>Quidem aperiam atque dolor blanditiis omnis aspernatur, fugit repudiandae eos at
+    beatae, sapiente non in quis.
+
+   
+
+    <script>
+        let blocks = document.querySelectorAll("[data-time]");
+        blocks.forEach(function (el) {
+            el.addEventListener('mouseover', function () {
+                this.setAttribute('title', this.innerText)
+            })
+        })
+    </script>
+</body>
+
+</html>
